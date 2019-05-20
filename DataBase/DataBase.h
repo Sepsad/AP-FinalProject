@@ -18,9 +18,6 @@ public:
     std::vector<Film*> get_all_films();
 
     void delete_film(int id);
-    
-
-
 protected:
 
     std::vector <User*> members;
