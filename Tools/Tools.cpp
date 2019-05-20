@@ -1,4 +1,5 @@
 #include "Tools.h"
+#include "../Exceptions/Exceptions.h"
 
 
 std::vector<std::string> Tools::parse(std::string request)

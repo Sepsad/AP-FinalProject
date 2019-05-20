@@ -9,8 +9,12 @@
 class RequestReader
 {
 public:
-    static Request* read_to_question_sign(std::string raw_req);
-    
+    static Request* read(std::string raw_req);
+private:
+    static int find_sign_index(std::vector <std::string> req, std::string sign);
+    static std::string create_url(std::vector <std::string> req, int question_sign_index);
+    static std::map <std::string, std::string> get_parameter(std::vector <std::string> req, int question_sign_index);
+
 };
 
 

@@ -3,12 +3,12 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 class Tools
 {
 public:
     static std::vector<std::string> parse(std::string request);
-    
 };
 
 #endif
