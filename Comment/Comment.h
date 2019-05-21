@@ -3,17 +3,19 @@
 
 #include <string>
 #include <vector>
+#include "Reply.h"
 
 class Comment
 {
 public:
     Comment(std::string _content);
-    void reply(Comment* _cm);
+    ~Comment();
+    void reply(Reply* _rep);
     void view();
     
 private:
     int id;
     std::string content;
-    std::vector <Comment*> replies;
+    std::vector <Reply*> replies;
 };
 #endif  

@@ -7,9 +7,8 @@ class Notification
 {
 public:
     Notification(std::string _content);
-    void view_unread();
-    void view();
-    void read();
+    std::string get_content();
+    bool is_read();
 
 private:
     std::string content;

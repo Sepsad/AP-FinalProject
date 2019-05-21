@@ -14,8 +14,14 @@ public:
     void follow(User* user);
     void increase_money(int amount);
     void buy(Film* film);
-    virtual void get_type();
-    void recieve_notifications();
+    void recieve_notifications(Notification* notification);
+
+    virtual std::string get_type();
+    int get_id();
+    
+    void view_purchased_films();
+    void view_all_notifications(int limit);
+    void view_unread_notifications();
 protected:
     int id;
     std::string email;
