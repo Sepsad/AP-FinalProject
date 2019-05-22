@@ -9,11 +9,7 @@ public:
     void add_film(Film* film);
     void delete_film(int id);
 
-    Film* get_film(int id);
     void get_money_from_network();
-
-    void reply(int film_id, int comment_id, std::string content);
-    void delete_comment(int film_id, int comment_id);
 
     virtual std::string get_type(); 
     

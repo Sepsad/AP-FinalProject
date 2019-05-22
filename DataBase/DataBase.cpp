@@ -13,6 +13,11 @@ void DataBase::add_film(Film* film)
     films.push_back(film);
 }
 
+void DataBase::add_money_to_tresury(Money* money)
+{
+    treasury.push_back(money);
+}
+
 Film* DataBase::get_film(int id)
 {
     for (int i = 0; i < films.size(); i++)
@@ -53,3 +58,23 @@ void DataBase::delete_film(int id)
     }
     throw NotFoundEx();
 }
+
+std::vector<Film*>  DataBase::get_all_films()
+{
+    return films;
+}
+
+std::vector<Money*> DataBase::get_treasury()
+{
+    return treasury;
+}
+
+int DataBase::get_last_user_id()
+{
+    return users.size();
+}
+int DataBase::get_last_film_id()
+{
+    return films.size();
+}
+
