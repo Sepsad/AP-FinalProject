@@ -10,6 +10,7 @@ class Comment
 public:
     Comment(std::string _content);
     ~Comment();
+    int get_id();
     void reply(Reply* _rep);
     void view();
     

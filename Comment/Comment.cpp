@@ -12,6 +12,13 @@ Comment::Comment(std::string _content)
 //         delete replies[i];
 //     }
 // }
+
+
+int Comment::get_id()
+{
+    return id;
+}
+
 void Comment::reply(Reply* reply)
 {
     replies.push_back(reply);

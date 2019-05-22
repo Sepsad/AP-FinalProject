@@ -1,4 +1,5 @@
 #include "Film.h"
+#include "../Exceptions/Exceptions.h"
 #include <iostream>
 
 Film::Film(std::string _name, int _year, int _lentgh, int _price,
@@ -6,8 +7,26 @@ Film::Film(std::string _name, int _year, int _lentgh, int _price,
 {
     name = _name; year = _year; length = _lentgh; price = _price; 
     summary=_summary; director = _dircetor; publisher = _publisher;
-    total_score = 0; scorer_numbers = 0;
+    std::vector <Rate*> _rates; rates = _rates; 
 }
+
+double Film::calculate_total_score()
+{
+    if(rates.size() == 0)
+    {
+        return 0;
+    }
+    double total=0;
+    for (int i = 0; i < rates.size(); i++)
+    {
+        total += rates[i]->get_score();
+    }
+
+    total = total / rates.size();
+    return total;
+}
+
+
 
 void Film::view(int number)
 {
@@ -16,12 +35,7 @@ void Film::view(int number)
     std::cout << name << " | ";
     std::cout << length << " | ";
     std::cout << price << " | ";
-
-    if(scorer_numbers == 0)
-        std::cout << 0 << " | ";
-    else
-        std::cout << double(total_score/scorer_numbers) << " | ";
-    
+    std::cout << calculate_total_score() << " | ";
     std::cout <<  year << " | ";
     std::cout << director;
 }
@@ -34,9 +48,45 @@ void Film::view_details()
     std::cout << "Length = " << length << std::endl;
     std::cout << "Year = " << year << std::endl;
     std::cout << "Summary = " << summary << std::endl;
-    if(scorer_numbers == 0)
-        std::cout << "rate = " << 0 << std::endl;
-    else
-        std::cout << "rate = " << double(total_score/scorer_numbers) << std::endl;
-        std::cout << "price = " << price << std::endl;
+    std::cout << "rate = " << calculate_total_score() << std::endl;
+    std::cout << "price = " << price << std::endl;
 }
+
+void Film::add_comment(Comment* comment)
+{
+    comments.push_back(comment);
+}
+
+void Film::add_reply_to_comment(int id, Reply* reply)
+{
+    for (int i = 0; i < comments.size(); i++)
+    {
+        if(comments[i]->get_id() == id)
+        {
+            comments[i]->reply(reply);
+            return;
+        }
+    }
+
+    throw NotFoundEx();
+}
+
+
+void Film::rate(Rate* rate)
+{
+    rates.push_back(rate);
+}
+
+int Film::get_id()
+{
+    return id;
+}
+
+
+
+void Film::edit_film(std::string _name = "", int _year = -1, int _lentgh = -1,
+             std::string _summary = "", std::string _dircetor = "")
+{
+
+}
+

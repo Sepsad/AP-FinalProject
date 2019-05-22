@@ -54,7 +54,6 @@ void User::view_purchased_films()
 
 }
 
-
 void User::view_unread_notifications()
 {
 
