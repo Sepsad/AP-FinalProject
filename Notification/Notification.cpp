@@ -16,3 +16,8 @@ bool Notification::is_read()
 {
     return read;
 }
+
+void Notification::set_read()
+{
+    read = true;
+}

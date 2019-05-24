@@ -9,7 +9,7 @@ public:
     Notification(std::string _content);
     std::string get_content();
     bool is_read();
-
+    void set_read();
 private:
     std::string content;
     bool read;

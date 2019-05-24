@@ -1,9 +1,9 @@
 #include "Money.h"
 
 
-Money::Money(User* _user, int _amount)
+Money::Money(User* _user, Film* _film, int _amount)
 {
-    user = _user; amount = _amount;
+    user = _user; amount = _amount; film = _film;
 }
 
 User* Money::get_user()

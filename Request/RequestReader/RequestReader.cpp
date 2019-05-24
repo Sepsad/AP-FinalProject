@@ -47,13 +47,12 @@ Request* RequestReader::read(std::string raw_req)
 {
     std::vector <std::string> tokenized_string = Tools::parse(raw_req);
     
-    if(tokenized_string[0] != POST || tokenized_string[0] != GET || 
-            tokenized_string[0] != DELETE || tokenized_string[0] != PUT)
+    if(tokenized_string[0] != POST && tokenized_string[0] != GET && 
+            tokenized_string[0] != DELETE && tokenized_string[0] != PUT)
     {
         throw BadRequestEx();
         return NULL;
     }
-
     std::string type = tokenized_string[0];
     int question_sign_index = RequestReader::find_sign_index(tokenized_string, "?");
     std::string url = RequestReader::create_url(tokenized_string, question_sign_index);

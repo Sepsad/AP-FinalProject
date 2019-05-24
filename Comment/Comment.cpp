@@ -1,18 +1,17 @@
 #include "Comment.h"
 #include <iostream>
 
-Comment::Comment(std::string _content)
+Comment::Comment(int _id ,std::string _content, User* _user)
 {
+    id = _id;
     content = _content;
+    user = _user;
 }
-// Comment::~Comment()
-// {
-//     for (int i = 0; i < replies.size(); i++)
-//     {
-//         delete replies[i];
-//     }
-// }
 
+User* Comment::get_user()
+{
+    return user;
+}
 
 int Comment::get_id()
 {

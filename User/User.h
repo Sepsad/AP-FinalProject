@@ -10,18 +10,33 @@ class User
 {
 
 public:
-    User(std::string _email, std::string _username, std::string _password, int _age);
-    void follow(User* user);
-    void increase_money(int amount);
-    void buy(Film* film);
-    void recieve_notifications(Notification* notification);
+    User(int _id ,std::string _email, std::string _username, std::string _password, int _age);
+    virtual void follow(User* user);
+    virtual void increase_money(int amount);
+    virtual void buy(Film* film);
+    virtual void recieve_notifications(Notification* notification);
+    virtual void add_follower(User* _user);
 
     virtual std::string get_type();
-    int get_id();
-    
-    void view_purchased_films();
-    void view_all_notifications(int limit);
-    void view_unread_notifications();
+    virtual int get_id();
+    virtual std::string get_username();
+    virtual std::vector<Film*> get_films();
+
+    virtual void view_identity();
+    virtual void view_purchased_films();
+    virtual void view_all_notifications(int limit);
+    virtual void view_unread_notifications();
+
+    virtual bool check_password(std::string _password);
+    virtual bool is_publisher();
+
+
+    virtual void add_film(Film* film);
+    virtual void delete_film(int id);
+    virtual Film* get_film(int id);
+    virtual std::vector <User*>  get_followers();
+
+
 protected:
     int id;
     std::string email;
@@ -32,7 +47,8 @@ protected:
 
     std::vector<Film*> purchased_films;
 
-    std::vector<User*> followings; 
+    std::vector<User*> followings;
+    std::vector<User*> followers;
 
     std::vector<Notification*> notifications;
 

@@ -20,3 +20,10 @@ std::vector<std::string> Tools::parse(std::string request)
 		tokens_of_line.push_back(request.substr( start ,  request.size() - start ));
 	return tokens_of_line ;
 }
+
+bool is_number(const std::string& s)
+{
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
+}

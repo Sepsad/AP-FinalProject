@@ -1,11 +1,31 @@
 #ifndef _Exceptions_H_
 #define _Exceptions_H_
 
-class BadRequestEx {};
+#include <exception>
 
-class NotFoundEx {};
+class BadRequestEx : public std::exception
+{
+public:
+    virtual char const * what() const noexcept { return "Bad Request"; } 
+};
 
-class PermissionEx {};
+class NotFoundEx : public std::exception
+{
+public:
+    virtual char const * what() const noexcept { return "Not Found"; }
+};
+
+class PermissionEx : public std::exception
+{
+public:
+    virtual char const * what() const noexcept { return "Permission Denied"; }
+};
+
+
+
+
+
+
 
 #endif
 
