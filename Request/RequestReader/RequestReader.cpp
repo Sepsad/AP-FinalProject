@@ -8,6 +8,7 @@ const std::string GET = "GET";
 const std::string DELETE = "DELETE";
 const std::string PUT = "PUT";
 
+const std::string QUESTIONSIGNINDEX = "?";
 
 int RequestReader::find_sign_index(std::vector <std::string> req, std::string sign)
 {
@@ -46,7 +47,10 @@ std::map <std::string, std::string> RequestReader::get_parameter(std::vector <st
 Request* RequestReader::read(std::string raw_req)
 {
     std::vector <std::string> tokenized_string = Tools::parse(raw_req);
-    
+	if(tokenized_string.size() < 1)
+	{
+		return NULL;
+	}
     if(tokenized_string[0] != POST && tokenized_string[0] != GET && 
             tokenized_string[0] != DELETE && tokenized_string[0] != PUT)
     {
@@ -54,7 +58,7 @@ Request* RequestReader::read(std::string raw_req)
         return NULL;
     }
     std::string type = tokenized_string[0];
-    int question_sign_index = RequestReader::find_sign_index(tokenized_string, "?");
+    int question_sign_index = RequestReader::find_sign_index(tokenized_string, QUESTIONSIGNINDEX);
     std::string url = RequestReader::create_url(tokenized_string, question_sign_index);
     if(question_sign_index == tokenized_string.size())
     {

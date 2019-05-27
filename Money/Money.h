@@ -1,8 +1,8 @@
 #ifndef _MONEY_H_ 
 #define _MONEY_H_
 
-#include "../../User/User.h"
-#include "../../Film/Film.h"
+#include "../User/User.h"
+#include "../Film/Film.h"
 
 class Money
 {

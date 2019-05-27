@@ -5,13 +5,11 @@
 #include "../../../User/Publisher.h"
 #include "../../../Network/Network.h"
 #include "../../../Film/Film.h"
-#include "../../../DataBase/Money/Money.h"
+#include "../../../Money/Money.h"
 #include "../../../Comment/Comment.h"
 #include "../../../Comment/Reply.h"
 #include "../../../Notification/Notification.h"
 #include "../../../Rate/Rate.h"
-
-
 
 
 #include "PostHandleTools/PostHandleTools.h"

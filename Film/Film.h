@@ -2,12 +2,14 @@
 #define _FILM_H_
 #include <vector>
 #include <string>
+#include "../User/User.h"
 #include "../Rate/Rate.h"
 #include "../Comment/Comment.h"
 #include "../Comment/Reply.h"
-#include "../User/User.h"
 #include "../User/Publisher.h"
 
+class User;
+class Comment;
 
 class Film 
 { 

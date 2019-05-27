@@ -2,7 +2,7 @@
 #define _POSTHANDLETOOLS_H_
 
 #include <vector>
-#include "../../../../DataBase/Money/Money.h"
+#include "../../../../Money/Money.h"
 #include "../../../../User/User.h"
 #include "../../../../Notification/Notification.h"
 
