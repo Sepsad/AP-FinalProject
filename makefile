@@ -2,14 +2,24 @@ CC := g++ --std=c++11
 
 all: main.out
 
+main.out : Publisher.o main.o DataBase.o Money.o User.o \
+	Comment.o Tools.o Film.o Network.o Notification.o \
+	Rate.o Request.o RequestReader.o RequestHandler.o \
+	POSTHandler.o POSTHandleTools.o DELETEHandler.o \
+	GETHandler.o PUTHandler.o Execute.o
+
+	${CC} main.o Comment.o DataBase.o Money.o User.o \
+	Publisher.o Tools.o Film.o Network.o Notification.o \
+	Rate.o Request.o RequestReader.o RequestHandler.o \
+	POSTHandler.o POSTHandleTools.o DELETEHandler.o \
+	GETHandler.o PUTHandler.o Execute.o -o main.out
 
 
-main.out : main.o Comment.o DataBase.o Money.o 
-	${CC} main.o Comment.o DataBase.o Money.o User.o Publisher.o Tools.o Film.o Network.o Notification.o Rate.o Request.o RequestReader.o RequestHandler.o POSTHandler.o POSTHandleTools.o DELETEHandler.o GETHandler.o PUTHandler.o -o main.out
-
-
-main.o : main.cpp Execute/Execute.h
+main.o : main.cpp Execute/Execute.h Tools/Tools.h
 	${CC} -c main.cpp -o main.o
+
+Execute.o : Execute/Execute.h DataBase/DataBase.h Request/Request.h Request/RequestReader/RequestReader.h Request/RequestHandler/RequestHandler.h Execute/Execute.h
+	${CC} -c Execute/Execute.cpp -o Execute.o
 
 Comment.o : Comment/Comment.h Comment/Reply.h User/User.h Film/Film.h Comment/Comment.cpp
 	${CC} -c Comment/Comment.cpp -o Comment.o
@@ -38,7 +48,7 @@ Network.o :	Network/Network.h DataBase/DataBase.h User/User.h Network/Network.cp
 Notification.o : Notification/Notification.h Notification/Notification.cpp
 	${CC} -c Notification/Notification.cpp -o Notification.o
 
-Rate.o : Rate/Rate.h User/User.h Rate/Rate.cpp
+Rate.o : Rate/Rate.h Rate/Rate.cpp
 	${CC} -c Rate/Rate.cpp -o Rate.o
 
 Request.o : Request/Request.h Request/Request.cpp
@@ -53,17 +63,17 @@ RequestHandler.o : Request/RequestHandler/RequestHandler.h Request/RequestHandle
 POSTHandler.o : Request/RequestHandler/POSTHandler/POSTHandler.h Rate/Rate.h Notification/Notification.h Comment/Reply.h Comment/Comment.h  Money/Money.h Film/Film.h Network/Network.h User/User.h User/Publisher.h  Request/RequestHandler/POSTHandler/POSTHandler.cpp
 	${CC} -c Request/RequestHandler/POSTHandler/POSTHandler.cpp -o POSTHandler.o
 
-POSTHandleTools.o : Request/RequestHandler/POSTHandler/POSTHandleTools/POSTHandleTools.h Rate/Rate.h Notification/Notification.h Comment/Reply.h Comment/Comment.h  Money/Money.h Film/Film.h Network/Network.h User/User.h User/Publisher.h  Request/RequestHandler/POSTHandler/POSTHandleTools/POSTHandleTools.cpp
-	${CC} -c Request/RequestHandler/POSTHandleTools/POSTHandler/POSTHandleTools.cpp -o POSTHandleTools.o
+POSTHandleTools.o : Request/RequestHandler/POSTHandler/PostHandleTools/PostHandleTools.h Rate/Rate.h Notification/Notification.h Comment/Reply.h Comment/Comment.h  Money/Money.h Film/Film.h Network/Network.h User/User.h User/Publisher.h  Request/RequestHandler/POSTHandler/PostHandleTools/PostHandleTools.cpp
+	${CC} -c Request/RequestHandler/POSTHandler/PostHandleTools/PostHandleTools.cpp -o POSTHandleTools.o
 
 DELETEHandler.o : Request/RequestHandler/DELETEHandler/DELETEHandler.h  Rate/Rate.h Notification/Notification.h Comment/Reply.h Comment/Comment.h  Money/Money.h Film/Film.h Network/Network.h User/User.h User/Publisher.h Request/RequestHandler/DELETEHandler/DELETEHandler.cpp  
-	${CC} -c Request/RequestHandler/DELTEHandler/DELETEHandler.cpp -o DELETEHandler.o
+	${CC} -c Request/RequestHandler/DELETEHandler/DELETEHandler.cpp -o DELETEHandler.o
 
 GETHandler.o : Request/RequestHandler/GETHandler/GETHandler.h  Rate/Rate.h Notification/Notification.h Comment/Reply.h Comment/Comment.h  Money/Money.h Film/Film.h Network/Network.h User/User.h User/Publisher.h Request/RequestHandler/GETHandler/GETHandler.cpp  
-	${CC} -c Request/RequestHandler/DELTEHandler/GETHandler.cpp -o GETHandler.o
+	${CC} -c Request/RequestHandler/GETHandler/GETHandler.cpp -o GETHandler.o
 
 PUTHandler.o : Request/RequestHandler/PUTHandler/PUTHandler.h  Rate/Rate.h Notification/Notification.h Comment/Reply.h Comment/Comment.h  Money/Money.h Film/Film.h Network/Network.h User/User.h User/Publisher.h Request/RequestHandler/PUTHandler/PUTHandler.cpp  
-	${CC} -c Request/RequestHandler/DELTEHandler/PUTHandler.cpp -o PUTHandler.o
+	${CC} -c Request/RequestHandler/PUTHandler/PUTHandler.cpp -o PUTHandler.o
 
 
 

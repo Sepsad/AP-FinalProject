@@ -1,5 +1,7 @@
 #include "Publisher.h"
 #include "../Exceptions/Exceptions.h"
+#include "../Film/Film.h"
+
 
 Publisher::Publisher(int _id,std::string _email, std::string _username, std::string _password, int _age)
                 : User(_id,_email,_username,_password,_age)  {}
@@ -48,6 +50,6 @@ Film* Publisher::get_film(int id)
             return films[i];
         }
     }
-    return NULL;
+    return nullptr;
     
 }

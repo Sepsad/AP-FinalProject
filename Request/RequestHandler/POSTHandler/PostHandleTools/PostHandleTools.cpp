@@ -1,5 +1,6 @@
 #include "PostHandleTools.h"
 #include"../../../../DataBase/DataBase.h"
+#include <iostream>
 
 int PostHandleTools::calculate(std::vector <Money*> tresury, User* user)
 {
@@ -44,7 +45,7 @@ void PostHandleTools::send_notification_to_user(User*user, Notification* notif)
 
 bool PostHandleTools::is_username_duplicate(std::string username, DataBase* db)
 {
-   if(db->search_user_by_username(username) != NULL)
+   if(!(db->search_user_by_username(username)))
    {
        return false;
    }

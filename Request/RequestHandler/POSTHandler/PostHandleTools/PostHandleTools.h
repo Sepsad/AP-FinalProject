@@ -6,6 +6,7 @@
 #include "../../../../User/User.h"
 #include "../../../../Notification/Notification.h"
 
+class DataBase;
 
 
 class PostHandleTools

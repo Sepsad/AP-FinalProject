@@ -2,7 +2,8 @@
 #define _DATABASE_H_
 
 #include <vector>
-#include "Money/Money.h"
+#include <string>
+#include "../Money/Money.h"
 
 class User;
 class Film;

@@ -3,8 +3,11 @@
 
 #include <string>
 #include <regex>
-#include "../Film/Film.h"
-#include "../Notification/Notification.h"
+// #include "../Film/Film.h"
+// #include "../Notification/Notification.h"
+
+class Film;
+class Notification;
 
 class User
 {

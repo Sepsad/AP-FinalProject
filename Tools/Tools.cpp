@@ -21,7 +21,7 @@ std::vector<std::string> Tools::parse(std::string request)
 	return tokens_of_line ;
 }
 
-bool is_number(const std::string& s)
+bool Tools::is_number(const std::string& s)
 {
     std::string::const_iterator it = s.begin();
     while (it != s.end() && std::isdigit(*it)) ++it;

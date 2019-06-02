@@ -36,7 +36,7 @@ bool less_than_key_film(Film*& film1,Film* film2)
 void GETHandler::followers_handler(Request* req, DataBase* db, Network* network)
 {
     User* user = network->get_online_user();
-    if (user == NULL)
+    if (!user)
     {
         throw PermissionEx();
         return ; 
@@ -68,7 +68,7 @@ void GETHandler::films_handler(Request* req, DataBase* db, Network* network)
 {
     User* user = network->get_online_user();
 
-    if (user == NULL)
+    if (!user)
     {
         throw PermissionEx();
         return ; 
@@ -76,9 +76,9 @@ void GETHandler::films_handler(Request* req, DataBase* db, Network* network)
     std::map <std::string, std::string> params = req->get_parameters();
     
     if (!(params[FILM_ID] == ""))
-    {
+    {        
         Film* film = db->get_film(std::stoi(params[FILM_ID]));
-        if(film == NULL)
+        if(!film)
         {
             throw NotFoundEx();
             return;
@@ -98,16 +98,28 @@ void GETHandler::films_handler(Request* req, DataBase* db, Network* network)
             films[i]->view_recom();
         }
     }
-    
-
-
+    if (params[FILM_ID] == "")
+    {
+        std::vector <Film*> films = db->get_all_films();
+        std::cout << "#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Director\n";
+        int cnt = 1;
+        for (int i = 0; i < films.size(); i++)
+        {
+            if(films[i]->ok_for_view(params[NAME], params[MIN_RATE], params[MIN_YEAR], params[PRICE], params[MAX_YEAR], params[DIRECTOR]))
+            {
+                std::cout << cnt <<". ";
+                films[i]->view();
+                cnt++;
+            }
+        }
+    }
 
 }
 
 void GETHandler::notification_handler(Request* req, DataBase* db, Network* network)
 {
     User* user = network->get_online_user();
-    if (user == NULL)
+    if (!user )
     {
         throw PermissionEx();
         return ; 
@@ -121,7 +133,7 @@ void GETHandler::notification_handler(Request* req, DataBase* db, Network* netwo
 void GETHandler::notificationread_handler(Request* req, DataBase* db, Network* network)
 {
     User* user = network->get_online_user();
-    if (user == NULL)
+    if (!user)
     {
         throw PermissionEx();
         return ; 
@@ -140,7 +152,7 @@ void GETHandler::notificationread_handler(Request* req, DataBase* db, Network* n
 void GETHandler::purchased_handler(Request* req, DataBase* db, Network* network)
 {
     User* user = network->get_online_user();
-    if (user == NULL)
+    if (!user)
     {
         throw PermissionEx();
         return ; 
@@ -169,7 +181,7 @@ void GETHandler::purchased_handler(Request* req, DataBase* db, Network* network)
 void GETHandler::published_handler(Request* req, DataBase* db, Network* network)
 {
     User* user = network->get_online_user();
-    if (user == NULL)
+    if (!user)
     {
         throw PermissionEx();
         return ; 
@@ -181,7 +193,6 @@ void GETHandler::published_handler(Request* req, DataBase* db, Network* network)
     }
     std::map <std::string, std::string> params = req->get_parameters();
     std::vector <Film*> films = (user)->get_films();
-
     std::cout << "#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Director\n";
     int cnt = 1;
     for (int i = 0; i < films.size(); i++)
@@ -195,4 +206,82 @@ void GETHandler::published_handler(Request* req, DataBase* db, Network* network)
     }
 
     
+}
+
+
+void GETHandler::handle(Request* req, DataBase* db, Network* network)
+{
+    if(req->get_url() == PUBLISHED_URL)
+    {
+        try
+        {
+            published_handler(req,db,network);
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << '\n';
+        }
+        
+    }
+    else if (req -> get_url() == FOLLOWERS_URL)
+    {
+        try
+        {
+            followers_handler(req, db,network);
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << '\n';
+        }   
+    }
+    else if(req->get_url() == FILMS_URL)
+    {
+        try
+        {
+            films_handler(req, db, network);
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << '\n';
+        }
+    }
+    else if(req->get_url() == PURCHASED_URL)
+    {
+        try
+        {
+            purchased_handler(req, db, network);
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << '\n';
+        }
+    }
+    else if(req->get_url() == NOTIFICATION_URL)
+    {
+        try
+        {
+            notification_handler(req, db, network);
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << '\n';
+        }
+    }
+    else if(req->get_url() == NOTIFICATIONREAD_URL)
+    {
+        try
+        {
+            notificationread_handler(req, db, network);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+    }
+    else
+    {
+        throw BadRequestEx();
+    }
+
 }

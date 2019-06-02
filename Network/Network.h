@@ -7,7 +7,7 @@ class Network
     
 public:
     Network();
-    bool is_user_null();
+    bool is_user_nullptr();
     void login(User* user);
     User* get_online_user();
 

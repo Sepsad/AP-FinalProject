@@ -1,7 +1,12 @@
 #ifndef _PUBLISHER_H_ 
 #define _PUBLISHER_H_
 
+#include <string>
+#include <vector>
+
 #include "User.h"
+// #include "../Film/Film.h"
+// class User;
 
 class Film;
 

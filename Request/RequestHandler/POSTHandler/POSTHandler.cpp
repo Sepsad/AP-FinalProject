@@ -51,23 +51,23 @@ void POSTHandler::sign_up_handler(Request* req, DataBase* db, Network* network)
     {
         throw BadRequestEx();
     }
-    if(PostHandleTools::is_username_duplicate(params[USERNAME], db))
+    if(PostHandleTools::is_username_duplicate(params[USERNAME], db) == true)
     {
         throw BadRequestEx();
         return;
     }
     if(params[PUBLISHER] == TRUE_STR)
     {
-        db->add_member(new Publisher(db->get_last_user_id()+1, params[EMAIL],
+        db->add_member(new Publisher((db->get_last_user_id()+1), params[EMAIL],
                 params[USERNAME], params[PASSWORD], std::stoi(params[AGE])));       
     }
     else
     {
-        db->add_member(new User(db->get_last_user_id()+1, params[EMAIL], 
+        db->add_member(new User((db->get_last_user_id()+1), params[EMAIL], 
                 params[USERNAME], params[PASSWORD], std::stoi(params[AGE])));  
     }
     
-    if(network->is_user_null())
+    // if(network->is_user_nullptr())
     {
         network->login(db->get_last_user());
     }
@@ -79,21 +79,23 @@ void POSTHandler::sign_up_handler(Request* req, DataBase* db, Network* network)
 void POSTHandler::login_handler(Request* req, DataBase* db, Network* network)
 {
     std::map <std::string, std::string> params = req->get_parameters();
+    User* user = db->search_user_by_username(params[USERNAME]);
     if(params.size()  < 2)
     {
         throw BadRequestEx();
     }
-    User* user = db->search_user_by_username(params[USERNAME]);
-    if (user == NULL )
+    if (!user)
     {  
-       throw BadRequestEx(); 
+       throw NotFoundEx(); 
        return ;
     }
     if ( user->check_password(params[PASSWORD]) )
     {
+        std::cout << user->get_username() << std::endl ;
         network->login(user);
         return;
     }
+    
     throw BadRequestEx();
 }
 
@@ -103,7 +105,7 @@ void POSTHandler::login_handler(Request* req, DataBase* db, Network* network)
 void POSTHandler::films_handler(Request* req, DataBase* db, Network* network)
 {
     
-    if(network->get_online_user() == NULL)
+    if(!network->get_online_user())
     {
         throw PermissionEx();
         return ;
@@ -122,6 +124,10 @@ void POSTHandler::films_handler(Request* req, DataBase* db, Network* network)
     db->add_film(new Film(db->get_last_film_id(), params[NAME], std::stoi(params[YEAR]), std::stoi(params[LENGTH]), 
             std::stoi(params[PRICE]), params[SUMMARY], params[DIRECTOR], network->get_online_user()));
     
+    User* _user = network->get_online_user();
+    _user->add_film(new Film(db->get_last_film_id(), params[NAME], std::stoi(params[YEAR]), std::stoi(params[LENGTH]), 
+            std::stoi(params[PRICE]), params[SUMMARY], params[DIRECTOR], network->get_online_user()));
+
     std::string notif_content = "Publisher" + (network->get_online_user())->get_username() 
             + "with id" + std::to_string( (network->get_online_user())->get_id()) + "register new film."; 
 
@@ -136,7 +142,7 @@ void POSTHandler::money_handler(Request* req, DataBase* db, Network* network)
 {
     
     User* user = network->get_online_user();
-    if (user == NULL)
+    if (!user)
     {
         throw PermissionEx();
         return ; 
@@ -173,7 +179,7 @@ void POSTHandler::money_handler(Request* req, DataBase* db, Network* network)
 
 void POSTHandler::replies_handler(Request* req, DataBase* db, Network* network)
 {
-    if(network->get_online_user() == NULL)
+    if(!network->get_online_user())
     {
         throw PermissionEx();
         return ;
@@ -183,7 +189,7 @@ void POSTHandler::replies_handler(Request* req, DataBase* db, Network* network)
     {
         throw BadRequestEx();
     }
-    if((network->get_online_user())->get_film(std::stoi(params[FILM_ID])) == NULL)
+    if(!(network->get_online_user())->get_film(std::stoi(params[FILM_ID])))
     {
         throw PermissionEx();
         return;
@@ -204,12 +210,12 @@ void POSTHandler::followers_handler(Request* req, DataBase* db, Network* network
     {
         throw BadRequestEx();
     }
-    if(network->get_online_user() == NULL)
+    if(!network->get_online_user())
     {
         throw PermissionEx();
         return ;
     }
-    if(db->get_user(std::stoi(params[USER_ID]) == NULL))
+    if(!db->get_user(std::stoi(params[USER_ID])))
     {
         throw NotFoundEx();
         return;
@@ -231,12 +237,12 @@ void POSTHandler::followers_handler(Request* req, DataBase* db, Network* network
 void POSTHandler::buy_handler(Request* req, DataBase* db, Network* network)
 {
     std::map <std::string, std::string> params = req->get_parameters();
-    if(network->get_online_user() == NULL)
+    if(!network->get_online_user())
     {
         throw PermissionEx();
         return ;
     }
-    if(db->get_film(std::stoi(params[FILM_ID]) == NULL))
+    if(!db->get_film(std::stoi(params[FILM_ID])))
     {
         throw NotFoundEx();
         return;
@@ -260,12 +266,12 @@ void POSTHandler::buy_handler(Request* req, DataBase* db, Network* network)
 void POSTHandler::rate_handler(Request* req, DataBase* db, Network* network)
 {
     std::map <std::string, std::string> params = req->get_parameters();
-    if(network->get_online_user() == NULL)
+    if(!network->get_online_user())
     {
         throw PermissionEx();
         return ;
     }
-    if(db->get_film(std::stoi(params[FILM_ID]) == NULL))
+    if(!db->get_film(std::stoi(params[FILM_ID])))
     {
         throw NotFoundEx();
         return;
@@ -289,12 +295,12 @@ void POSTHandler::rate_handler(Request* req, DataBase* db, Network* network)
 void POSTHandler::comment_handler(Request* req, DataBase* db, Network* network)
 {
     std::map <std::string, std::string> params = req->get_parameters();
-    if(network->get_online_user() == NULL)
+    if(!network->get_online_user())
     {
         throw PermissionEx();
         return ;
     }
-    if(db->get_film(std::stoi(params[FILM_ID]) == NULL))
+    if(!db->get_film(std::stoi(params[FILM_ID])))
     {
         throw NotFoundEx();
         return;
@@ -310,17 +316,32 @@ void POSTHandler::comment_handler(Request* req, DataBase* db, Network* network)
 
 void POSTHandler::handle(Request* req, DataBase* db, Network* network)
 {
+
+    const std::string   LOGIN_URL = "login";
+    const std::string   SIGNUP_URL = "signup";
+    const std::string   FILMS_URL = "films";
+    const std::string   MONEY_URL = "money";
+    const std::string   REPLIES_URL = "replies";
+    const std::string   FOLLOWERS_URL = "followers";
+    const std::string   BUY_URL  = "buy";
+    const std::string   RATE_URL  = "rate";
+    const std::string   COMMENTS_URL = "comments";
+
+    
+    // std::cout << req->get_url() << std::endl ;
+
     if(req->get_url() == SIGNUP_URL)
     {
         try
         {
             sign_up_handler(req, db, network);
+            std::cout << "OK\n";
         }
         catch(const std::exception& e)
-        {
-            std::cout << e.what() << '\n';
+        {            
+            std::cout << e.what()<<  '\n';
         }
-        std::cout << "OK\n";
+        
 
     }
     else if(req->get_url() == LOGIN_URL)
@@ -328,13 +349,12 @@ void POSTHandler::handle(Request* req, DataBase* db, Network* network)
         try
         {
             login_handler(req, db, network);
-            
+            std::cout << "OK\n";
         }
         catch(const std::exception& e)
         {
             std::cout << e.what() << '\n';
         }
-        std::cout << "OK\n";
 
     }
     else if(req->get_url() == FILMS_URL )
@@ -347,7 +367,6 @@ void POSTHandler::handle(Request* req, DataBase* db, Network* network)
         {
             std::cout << e.what() << '\n';
         }
-        std::cout << "OK\n";
 
     }
 
@@ -356,12 +375,13 @@ void POSTHandler::handle(Request* req, DataBase* db, Network* network)
         try
         {
             money_handler(req, db, network);
+            std::cout << "OK\n";
+
         }
         catch(const std::exception& e)
         {
             std::cout << e.what() << '\n';
         }
-        std::cout << "OK\n";
     }
     
     else if(req->get_url() == REPLIES_URL)
@@ -369,12 +389,13 @@ void POSTHandler::handle(Request* req, DataBase* db, Network* network)
         try
         {
             replies_handler(req, db, network);
+            std::cout << "OK\n";
+
         }
         catch(const std::exception& e)
         {
             std::cout << e.what() << '\n';
         }
-        std::cout << "OK\n";
 
         
     }
@@ -384,12 +405,12 @@ void POSTHandler::handle(Request* req, DataBase* db, Network* network)
         try
         {
             followers_handler(req, db, network);
+            std::cout << "OK\n";
         }
         catch(const std::exception& e)
         {
             std::cout << e.what() << '\n';
         }
-        std::cout << "OK\n";
 
     }
 
@@ -398,12 +419,13 @@ void POSTHandler::handle(Request* req, DataBase* db, Network* network)
         try
         {
             buy_handler(req, db, network);
+            std::cout << "OK\n";
+
         }
         catch(const std::exception& e)
         {
             std::cout << e.what() << '\n';
         }
-        std::cout << "OK\n";
     }
     else if(req->get_url() == RATE_URL)
     {

@@ -1,7 +1,9 @@
 #ifndef _RATE_H_ 
 #define _RATE_H_
 
-#include "../User/User.h"
+// #include "../User/User.h"
+
+class User;
 
 class Rate
 {

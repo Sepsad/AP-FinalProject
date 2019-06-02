@@ -3,12 +3,19 @@
 Network::Network()
 {
     database = new DataBase();
-    online_user = NULL;
+    online_user = nullptr;
 }
 
-bool Network::is_user_null()
+bool Network::is_user_nullptr()
 {
-    return (online_user == NULL);
+    if(!online_user)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void Network::login(User* user)

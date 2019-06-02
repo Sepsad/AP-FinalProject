@@ -1,9 +1,10 @@
 #include "User.h"
 #include "../Exceptions/Exceptions.h"
 #include <iostream>
+#include "../Notification/Notification.h"
 
 
-bool is_email_valid(std::string& email)
+bool User::is_email_valid(std::string& email)
 {
     const std::regex pattern
             ("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");

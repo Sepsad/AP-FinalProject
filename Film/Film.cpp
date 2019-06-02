@@ -3,6 +3,11 @@
 #include "../Tools/Tools.h"
 #include <iostream>
 
+#include "../User/User.h"
+#include "../Rate/Rate.h"
+#include "../Comment/Comment.h"
+#include "../Comment/Reply.h"
+
 Film::Film(int _id,std::string _name, int _year, int _lentgh, int _price,
              std::string _summary ,std::string _dircetor, User* _publisher)
 {
@@ -138,7 +143,7 @@ Comment* Film::get_comment(int id)
             return comments[i];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -192,7 +197,19 @@ bool Film::ok_for_view(std::string _name , std::string min_rate , std::string mi
     int _min_rate = -1 ;
     int _min_year = 0 ;
     int _max_year = 10000;
-    int __price = -1 ; 
+    int __price = price ; 
+    std::string name_test = "";
+    std::string director_test = "";
+
+    if( _name.size() > 0)
+    {
+        name_test = name ;
+    }
+    if ( _director.size() > 0 )
+    {
+        director_test = director;
+    }
+    
 
     if( Tools::is_number(min_year))
     {
@@ -210,7 +227,7 @@ bool Film::ok_for_view(std::string _name , std::string min_rate , std::string mi
     {
         __price = std::stoi(_price);
     }
-    return ((name == _name) & (director == _director) &  (price == __price) & 
+    return ((name_test == _name) & (director_test == _director) &  (price == __price) & 
             (calculate_total_score() > _min_rate) & (year > _min_year) & (year < _max_year))   ;
 }
 

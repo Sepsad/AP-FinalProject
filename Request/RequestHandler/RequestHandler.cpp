@@ -6,16 +6,17 @@
 #include "PUTHandler/PUTHandler.h"
 #include "GETHandler/GETHandler.h"
 
-const std::string POST = "POST";
-const std::string PUT = "PUT";
-const std::string GET = "GET";
-const std::string DELETE = "DELETE";
 
 
 
 void RequestHandler::Handle(Request* request, DataBase* db, Network* network)
 {
-    if(request->get_type == POST)
+    const std::string POST = "POST";
+    const std::string PUT = "PUT";
+    const std::string GET = "GET";
+    const std::string DELETE = "DELETE";
+    
+    if(request->get_type() == POST)
     {
         try
         {
@@ -26,7 +27,7 @@ void RequestHandler::Handle(Request* request, DataBase* db, Network* network)
             std::cout << e.what() << '\n';
         }
     }
-    else if (request->get_type == GET)
+    else if (request->get_type() == GET)
     {
         try
         {
@@ -37,7 +38,7 @@ void RequestHandler::Handle(Request* request, DataBase* db, Network* network)
             std::cout << e.what() << '\n';
         }
     }
-    else if (request->get_type == PUT)
+    else if (request->get_type() == PUT)
     {
         try
         {
@@ -48,11 +49,11 @@ void RequestHandler::Handle(Request* request, DataBase* db, Network* network)
             std::cout << e.what() << '\n';
         }
     }
-    else if (request->get_type == DELETE)
+    else if (request->get_type() == DELETE)
     {
         try
         {
-            GETHandler::handle(request, db, network);
+            DELETEHandler::handle(request, db, network);
         }
         catch(const std::exception& e)
         {

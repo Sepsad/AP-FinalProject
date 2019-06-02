@@ -1,7 +1,8 @@
 #include "DataBase.h"
 #include "../Exceptions/Exceptions.h"
-#include "../User/User.h"
-#include "../Film/Film.h"
+// #include "../User/User.h"
+// #include "../Film/Film.h"
+#include <iostream>
 
 DataBase::DataBase()
 {
@@ -40,7 +41,7 @@ Film* DataBase::get_film(int id)
         }
     }
     throw NotFoundEx();
-    return NULL;
+    return nullptr;
 }
 User* DataBase::get_user(int id)
 {
@@ -51,7 +52,7 @@ User* DataBase::get_user(int id)
             return users[i];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 User* DataBase::get_last_user()
@@ -68,8 +69,7 @@ int DataBase::get_last_user_id()
     {
         return (users[users.size()-1]->get_id());
     }
-    throw BadRequestEx();
-    return -1;
+    return 0;
 }
 
 int DataBase::get_last_film_id()
@@ -78,8 +78,7 @@ int DataBase::get_last_film_id()
     {
         return (films[films.size()-1]->get_id());
     }
-    throw BadRequestEx();
-    return -1;
+    return 0;
 }
 
 std::vector<User*> DataBase::get_all_users()
@@ -97,14 +96,6 @@ std::vector<Money*> DataBase::get_treasury()
     return treasury;
 }
 
-int DataBase::get_last_user_id()
-{
-    return users.size();
-}
-int DataBase::get_last_film_id()
-{
-    return films.size();
-}
 
 void DataBase::delete_money_of_user_from_treasury(User* user)
 {
@@ -150,6 +141,7 @@ User* DataBase::search_user_by_username(std::string username)
             return users[i];
         }
     }
-    return NULL;    
+
+    return nullptr;    
 }
 

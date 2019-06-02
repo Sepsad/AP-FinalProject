@@ -1,0 +1,14 @@
+POST films ? name film1 year 1999 length 120 price 10000 summary summary|of|film1 director director_of_film1
+
+
+POST signup ? username pub password 123 email pub@gmail.com age 20 publisher true
+POST films ? name film1 year 1999 length 120 price 10000 summary summary|of|film1 director director_of_film1
+GET published
+POST signup ? username customer password 123 email user@gmail.com age 20
+GET films
+DELETE films ? film_id 1
+
+
+POST login ? username pub password 122
+POST login ? username pub password 123
+

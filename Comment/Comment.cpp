@@ -1,5 +1,7 @@
 #include "Comment.h"
 #include <iostream>
+#include "../User/User.h"
+
 
 Comment::Comment(int _id ,std::string _content, User* _user)
 {

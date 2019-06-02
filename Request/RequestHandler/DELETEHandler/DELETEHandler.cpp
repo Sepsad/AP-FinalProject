@@ -13,7 +13,7 @@ const std::string COMMENT_ID = "comment_id";
 void DELETEHandler::comments_handler(Request* req, DataBase* db, Network* network)
 {
     User* user = network->get_online_user();
-    if (user == NULL)
+    if (!user)
     {
         throw PermissionEx();
         return ; 
@@ -37,7 +37,7 @@ void DELETEHandler::comments_handler(Request* req, DataBase* db, Network* networ
 void DELETEHandler::films_handler(Request* req, DataBase* db, Network* network)
 {
         User* user = network->get_online_user();
-    if (user == NULL)
+    if (!user)
     {
         throw PermissionEx();
         return ; 
@@ -67,12 +67,12 @@ void DELETEHandler::handle(Request* req, DataBase* db, Network* network)
          try
         {
             films_handler(req, db, network);
+            std::cout << "OK\n";
         }
         catch(const std::exception& e)
         {
             std::cout << e.what() << '\n';
         }
-        std::cout << "OK\n";
     }
 
     if (req->get_url() == COMMENTS_URL)
@@ -80,12 +80,13 @@ void DELETEHandler::handle(Request* req, DataBase* db, Network* network)
          try
         {
             comments_handler(req, db, network);
+            std::cout << "OK\n";
+
         }
         catch(const std::exception& e)
         {
             std::cout << e.what() << '\n';
         }
-        std::cout << "OK\n";
 
         
     }

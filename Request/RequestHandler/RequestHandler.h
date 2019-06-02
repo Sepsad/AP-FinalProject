@@ -2,9 +2,9 @@
 #define _REQUESTHANDLER_H_
 
 
-#include "Request.h"
-#include "../DataBase/DataBase.h"
-#include "../Network/Network.h"
+#include "../Request.h"
+#include "../../DataBase/DataBase.h"
+#include "../../Network/Network.h"
 
 
 class RequestHandler
