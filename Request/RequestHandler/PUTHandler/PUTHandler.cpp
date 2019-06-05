@@ -43,13 +43,12 @@ void PUTHandler::handle(Request* req, DataBase* db, Network* network)
         try
         {
             films_handler(req, db, network);
-
+            std::cout << "OK\n";
         }
         catch(const std::exception& e)
         {
             std::cout << e.what() << '\n';
         }
-        std::cout << "OK\n";
     }
     else
     {

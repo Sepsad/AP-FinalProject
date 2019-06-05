@@ -10,6 +10,7 @@
 #include "../../../Comment/Reply.h"
 #include "../../../Notification/Notification.h"
 #include "../../../Rate/Rate.h"
+#include "../../../Tools/Tools.h"
 
 
 #include "PostHandleTools/PostHandleTools.h"
@@ -40,8 +41,16 @@ const std::string CONTENT = "content";
 const std::string USER_ID = "user_id";
 const std::string SCORE = "score";
 
+const std::string PUT_FILMS = "put_films";
+const std::string DELETE_FILMS = "delete_films";
+const std::string DELETE_COMMENTS = "delete_comments";
 
+const std::string LOGOUT_URL = "logout";
 
+void POSTHandler::logout_handler(Request* req, DataBase* db, Network* network)
+{
+    network->logout();
+}
 
 void POSTHandler::sign_up_handler(Request* req, DataBase* db, Network* network)
 {   
@@ -91,7 +100,6 @@ void POSTHandler::login_handler(Request* req, DataBase* db, Network* network)
     }
     if ( user->check_password(params[PASSWORD]) )
     {
-        std::cout << user->get_username() << std::endl ;
         network->login(user);
         return;
     }
@@ -116,12 +124,20 @@ void POSTHandler::films_handler(Request* req, DataBase* db, Network* network)
         return;
     }
     std::map <std::string, std::string> params = req->get_parameters();
+
     if(params.size() < 6)
     {
         throw BadRequestEx();
+        return;
+    }
+    if(params[NAME] == "" || params[YEAR] == "" || params[LENGTH] == "" || params[PRICE] == "" ||
+             params[SUMMARY] == "" || params[DIRECTOR] == "")
+    {
+        throw BadRequestEx();
+        return;
     }
 
-    db->add_film(new Film(db->get_last_film_id(), params[NAME], std::stoi(params[YEAR]), std::stoi(params[LENGTH]), 
+    db->add_film(new Film(db->get_last_film_id()+1, params[NAME], std::stoi(params[YEAR]), std::stoi(params[LENGTH]), 
             std::stoi(params[PRICE]), params[SUMMARY], params[DIRECTOR], network->get_online_user()));
     
     User* _user = network->get_online_user();
@@ -260,9 +276,6 @@ void POSTHandler::buy_handler(Request* req, DataBase* db, Network* network)
 
 
 }
-
-
-
 void POSTHandler::rate_handler(Request* req, DataBase* db, Network* network)
 {
     std::map <std::string, std::string> params = req->get_parameters();
@@ -314,6 +327,73 @@ void POSTHandler::comment_handler(Request* req, DataBase* db, Network* network)
     PostHandleTools::send_notification_to_user(film->get_publisher(),new Notification(notif_content));
 }
 
+
+void POSTHandler::put_film_handler(Request* req, DataBase* db, Network* network)
+{
+    std::map <std::string, std::string> params = req->get_parameters();
+    if(!(Tools::is_number(params[FILM_ID])))
+    {
+        throw BadRequestEx();
+        return ;
+    }
+    Film* film = db->get_film(std::stoi(params[FILM_ID]));
+    if(!(film->get_publisher() == network->get_online_user()))
+    {
+        throw PermissionEx();
+        return;
+    }
+    film->edit_film(params[NAME], params[YEAR], params[LENGTH], params[SUMMARY], params[DIRECTOR]);
+
+}
+
+void POSTHandler::delete_comments_handler(Request* req, DataBase* db, Network* network)
+{
+    User* user = network->get_online_user();
+    if (!user)
+    {
+        throw PermissionEx();
+        return ; 
+    }
+    if(!(user->is_publisher()))
+    {
+        throw PermissionEx();
+        return;
+    }
+
+
+    std::map <std::string, std::string> params = req->get_parameters();
+    if(params.size() < 2)
+    {
+        throw BadRequestEx();
+    }
+    Film* film = db->get_film(std::stoi(params[FILM_ID]));
+    film->delete_comment(std::stoi(params[COMMENT_ID]));
+}
+
+ void POSTHandler::delete_films_handler(Request* req, DataBase* db, Network* network)
+{
+    User* user = network->get_online_user();
+    if (!user)
+    {
+        throw PermissionEx();
+        return ; 
+    }
+    if(!(user->is_publisher()))
+    {
+        throw PermissionEx();
+        return;
+    }
+
+    std::map <std::string, std::string> params = req->get_parameters();
+    if(params.size() == 0)
+    {
+        throw BadRequestEx();
+    }
+    db->delete_film(std::stoi(params[FILM_ID]));
+}
+
+
+
 void POSTHandler::handle(Request* req, DataBase* db, Network* network)
 {
 
@@ -344,6 +424,19 @@ void POSTHandler::handle(Request* req, DataBase* db, Network* network)
         
 
     }
+    else if(req->get_url() == LOGOUT_URL)
+    {
+        try
+        {
+            logout_handler(req, db, network);
+            std::cout << "OK\n";
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << '\n';
+        }
+
+    }
     else if(req->get_url() == LOGIN_URL)
     {
         try
@@ -362,6 +455,7 @@ void POSTHandler::handle(Request* req, DataBase* db, Network* network)
         try
         {
             films_handler(req, db, network);
+            std::cout << "OK\n";
         }
         catch(const std::exception& e)
         {
@@ -376,7 +470,6 @@ void POSTHandler::handle(Request* req, DataBase* db, Network* network)
         {
             money_handler(req, db, network);
             std::cout << "OK\n";
-
         }
         catch(const std::exception& e)
         {
@@ -450,6 +543,42 @@ void POSTHandler::handle(Request* req, DataBase* db, Network* network)
             std::cout << e.what() << '\n';
         }
         std::cout << "OK\n";
+    }
+    else if(req->get_url() == PUT_FILMS)
+    {
+        try
+        {
+            put_film_handler(req, db, network);
+            std::cout << "OK\n";
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << '\n';
+        }
+    }
+    else if(req->get_url() == DELETE_FILMS)
+    {
+         try
+        {
+            delete_films_handler(req, db, network);
+            std::cout << "OK\n";
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << '\n';
+        }
+    }
+    else if (req->get_url() == DELETE_COMMENTS)
+    {
+         try
+        {
+            delete_comments_handler(req, db, network);
+            std::cout << "OK\n";
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << '\n';
+        }   
     }
     else
     {

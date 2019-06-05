@@ -16,9 +16,9 @@ const std::string DIRECTOR = "driector";
 const std::string MAX_YEAR = "max_year";
 const std::string MIN_YEAR = "min_year";
 const std::string MIN_RATE = "min_rate";
+const std::string ADMIN = "admin";
 
-
-
+const std::string MONEY_URL = "money";
 
 
 
@@ -48,12 +48,13 @@ void GETHandler::followers_handler(Request* req, DataBase* db, Network* network)
     }
     
     std::vector <User*> followers = user->get_followers();
+
+    std::cout << "List of Followers\n" ;
     if(followers.size() == 0)
     {
         return;
     }
     std::sort(followers.begin(),followers.end(),less_than_key_user);
-    std::cout << "List of Followers\n" ;
     std::cout << "#. User Id | User Username | User Email";
 
     for (int i = 0; i < followers.size(); i++)
@@ -67,7 +68,6 @@ void GETHandler::followers_handler(Request* req, DataBase* db, Network* network)
 void GETHandler::films_handler(Request* req, DataBase* db, Network* network)
 {
     User* user = network->get_online_user();
-
     if (!user)
     {
         throw PermissionEx();
@@ -76,7 +76,7 @@ void GETHandler::films_handler(Request* req, DataBase* db, Network* network)
     std::map <std::string, std::string> params = req->get_parameters();
     
     if (!(params[FILM_ID] == ""))
-    {        
+    {       
         Film* film = db->get_film(std::stoi(params[FILM_ID]));
         if(!film)
         {
@@ -92,7 +92,14 @@ void GETHandler::films_handler(Request* req, DataBase* db, Network* network)
         std::sort(films.begin(), films.end(), less_than_key_film);
         std::cout << "Recommendation Film\n";
         std::cout << "#. Film Id | Film Name | Film Length | Film Director\n";
-        for (int i = 0; i < 4; i++)
+        
+        int cnt = 4;
+        if(films.size() < 4)
+        {
+            cnt = films.size();
+        }
+
+        for (int i = 0; i < cnt; i++)
         {
             std::cout << (i+1) << ". ";
             films[i]->view_recom();
@@ -208,6 +215,23 @@ void GETHandler::published_handler(Request* req, DataBase* db, Network* network)
     
 }
 
+void GETHandler:: money_handler(Request* req, DataBase* db, Network* network)
+{  
+    User* online_user = network->get_online_user();
+    if (!online_user)
+    {
+        throw PermissionEx();
+        return;
+    }
+    if(online_user->get_username() == ADMIN )
+    {
+        std::cout << network->get_money() << std::endl ;
+        return;
+    }
+    
+    std::cout << online_user->get_money() << std::endl ;
+}
+
 
 void GETHandler::handle(Request* req, DataBase* db, Network* network)
 {
@@ -275,10 +299,22 @@ void GETHandler::handle(Request* req, DataBase* db, Network* network)
         }
         catch(const std::exception& e)
         {
-            std::cerr << e.what() << '\n';
+            std::cout << e.what() << '\n';
         }
         
     }
+    else if(req->get_url() == MONEY_URL)
+    {
+        try
+        {
+            money_handler(req, db, network);
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << '\n';
+        }
+    }
+
     else
     {
         throw BadRequestEx();

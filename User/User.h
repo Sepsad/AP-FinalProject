@@ -37,6 +37,7 @@ public:
     virtual void delete_film(int id);
     virtual Film* get_film(int id);
     virtual std::vector <User*>  get_followers();
+    virtual int get_money();
 
 
 protected:

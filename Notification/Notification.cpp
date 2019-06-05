@@ -1,4 +1,5 @@
 #include "Notification.h"
+#include <iostream>
 
 Notification::Notification(std::string _content)
 {
@@ -6,10 +7,9 @@ Notification::Notification(std::string _content)
     read = false;
 }
 
-std::string Notification::get_content()
+void Notification::view_content()
 {
-    read = true;
-    return content;
+    std::cout << content << "\n" ;
 }
 
 bool Notification::is_read()

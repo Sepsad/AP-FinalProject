@@ -9,7 +9,9 @@ public:
     Network();
     bool is_user_nullptr();
     void login(User* user);
+    void logout();
     User* get_online_user();
+    int get_money();
 
 private:
     User* online_user;

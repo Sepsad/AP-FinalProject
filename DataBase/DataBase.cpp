@@ -7,6 +7,8 @@
 DataBase::DataBase()
 {
     std::vector <User*> _users; users = _users;
+    User* admin = new User(0, "admin@amdim.ir" ,"admin", "admin" ,20);
+    _users.push_back(admin);
     std::vector <Film*> _films; films = _films;
     std::vector <Money*> _treasury; treasury = _treasury;
 }

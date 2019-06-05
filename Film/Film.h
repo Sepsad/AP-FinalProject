@@ -2,11 +2,6 @@
 #define _FILM_H_
 #include <vector>
 #include <string>
-// #include "../User/User.h"
-// #include "../Rate/Rate.h"
-// #include "../Comment/Comment.h"
-// #include "../Comment/Reply.h"
-// #include "../User/Publisher.h"
 
 class User;
 class Rate;
@@ -61,9 +56,6 @@ private:
     double calculate_total_score();
     
     std::vector <Comment*> comments;
-
-
-
 
 };
 

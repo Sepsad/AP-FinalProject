@@ -33,7 +33,7 @@ void PostHandleTools::send_notification_to_all(std::vector <User*> users, Notifi
 {
     for (int i = 0; i < users.size(); i++)
     {
-        users[i] ->recieve_notifications(notif);
+        users[i]->recieve_notifications(notif);
     }
 }
 

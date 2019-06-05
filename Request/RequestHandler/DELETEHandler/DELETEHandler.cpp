@@ -10,6 +10,11 @@ const std::string COMMENT_ID = "comment_id";
 
 
 
+
+
+
+
+
 void DELETEHandler::comments_handler(Request* req, DataBase* db, Network* network)
 {
     User* user = network->get_online_user();
@@ -36,7 +41,7 @@ void DELETEHandler::comments_handler(Request* req, DataBase* db, Network* networ
 
 void DELETEHandler::films_handler(Request* req, DataBase* db, Network* network)
 {
-        User* user = network->get_online_user();
+    User* user = network->get_online_user();
     if (!user)
     {
         throw PermissionEx();

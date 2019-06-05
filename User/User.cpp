@@ -81,7 +81,8 @@ void User::view_unread_notifications()
     {
         if(!(notifications[i]->is_read()))
         {
-            std::cout << i <<". " << notifications[i]->get_content() << "\n" ;
+            std::cout << i <<". ";
+            notifications[i]->view_content();
             notifications[i]->set_read();
         }
     }
@@ -96,7 +97,9 @@ void User::view_all_notifications(int limit)
     }
     for (int i = 0; i < limit ; i++)
     {
-        std::cout << i <<". " << notifications[i]->get_content() << "\n" ;
+        std::cout << i <<". ";
+        notifications[i]->view_content();
+        notifications[i]->set_read();
     }
 }
 
@@ -133,6 +136,13 @@ bool User::is_publisher()
 {
     return false;
 }
+
+int User::get_money()
+{
+    return money_amount;
+}
+
+
 
 void User::add_film(Film* film)
 {}

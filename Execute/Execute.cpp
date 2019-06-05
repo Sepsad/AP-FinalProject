@@ -18,11 +18,11 @@ void Execute::execute()
 
     while (getline(std::cin, raw_req))
     {   
-
         if(raw_req.size() == 0)
             continue;
         try
         {
+
             Request* req = RequestReader::read(raw_req);
             
             // std::map <std::string, std::string> params = req->get_parameters();
